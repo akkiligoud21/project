@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Random Quote Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f0f0f0;
+        }
+
+        #quote-generator {
+            width: 50%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        #quote {
+            font-size: 24px;
+            font-style: italic;
+        }
+
+        #source {
+            font-size: 18px;
+            color: #666;
+        }
+
+        button {
+            background: lightblue;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: skyblue;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="quote-generator">
+        <p id="quote">Click to generate a quote</p>
+        <p id="source">&mdash; Author</p>
+        <button id="get-quote-button">New Quote</button>
+    </div>
+    <script>
+        const quotes = [
+            { quote: "The best and most beautiful things in the world cannot be seen or even touched - they must be felt with the heart.", source: "Helen Keller" },
+            { quote: "It is during our darkest moments that we must focus to see the light.", source: "Aristotle" },
+            { quote: "Hardships often prepare ordinary people for an extraordinary destiny.", source: "C.S. Lewis" },
+            { quote: "The only way to do great work is to love what you do.", source: "Steve Jobs" },
+            { quote: "The two most important days in your life are the day you are born and the day you find out why.", source: "Mark Twain" }
+        ];
+
+        const quoteEl = document.getElementById('quote');
+        const sourceEl = document.getElementById('source');
+        const button = document.getElementById('get-quote-button');
+
+        function generateQuote() {
+            const randomIndex = Math.floor(Math.random() * quotes.length);  // Number math
+            const selected = quotes[randomIndex];  // Array access
+            quoteEl.innerHTML = selected.quote;
+            sourceEl.innerHTML = '&mdash; ' + selected.source;
+        }
+
+        button.addEventListener('click', generateQuote);  // Event listener
+
+        generateQuote();  // Initial quote
+    </script>
+</body>
+
+</html>

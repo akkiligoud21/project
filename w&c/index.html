@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Word/Character Counter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        #input {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            resize: vertical;
+        }
+
+        #input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        p {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        #word-count,
+        #char-count {
+            font-weight: bold;
+            color: #4CAF50;
+            font-size: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Word & Character Counter</h2>
+        <textarea id="input" placeholder="Start typing..." rows="10"></textarea>
+        <p>
+            <span id="word-count">0</span> Words,
+            <span id="char-count">0</span> Characters
+        </p>
+    </div>
+    <script>
+        const input = document.getElementById('input');
+        const wordCountEl = document.getElementById('word-count');
+        const charCountEl = document.getElementById('char-count');
+
+        function updateCount() {
+            const text = input.value;
+
+            // Character count (simple length)
+            charCountEl.textContent = text.length;
+
+            // Word count: trim, split on whitespace, filter empty
+            const trimmed = text.trim();
+            const words = trimmed ? trimmed.split(/\s+/).filter(word => word.length > 0) : [];
+            wordCountEl.textContent = words.length;
+        }
+
+        // Live update on input/change
+        input.addEventListener('input', updateCount);
+        input.addEventListener('paste', updateCount);  // For paste events
+        updateCount();  // Initial call
+
+    </script>
+</body>
+
+</html>
