@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Expense Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        #expense-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #218838;
+        }
+
+        #expense-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        #expense-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .delete {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .delete:hover {
+            background: #c82333;
+        }
+
+        .total {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Expense Tracker</h1>
+        <form id="expense-form">
+            <input type="text" id="name" placeholder="Expense Name" required>
+            <input type="number" id="amount" placeholder="Amount" step="0.01" required>
+            <button type="submit">Add Expense</button>
+        </form>
+        <ul id="expense-list"></ul>
+        <div class="total">Total: $<span id="total">0.00</span></div>
+    </div>
+    <script>
+        const form = document.getElementById('expense-form');
+        const list = document.getElementById('expense-list');
+        const totalEl = document.getElementById('total');
+        let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+
+        function addExpense(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value.trim();
+            const amount = parseFloat(document.getElementById('amount').value);
+            if (!name || amount <= 0) return alert('Invalid input');
+
+            const expense = { name, amount, id: Date.now() };
+            expenses.push(expense);  // Array manipulation
+            localStorage.setItem('expenses', JSON.stringify(expenses));
+            form.reset();
+            render();
+        }
+
+        function deleteExpense(id) {
+            expenses = expenses.filter(exp => exp.id !== id);  // Array filter
+            localStorage.setItem('expenses', JSON.stringify(expenses));
+            render();
+        }
+
+        function totalExpenses() {
+            const total = expenses.reduce((sum, exp) => sum + exp.amount, 0);  // Number math
+            totalEl.textContent = total.toFixed(2);
+        }
+
+        function render() {
+            list.innerHTML = '';
+            expenses.forEach(exp => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+      ${exp.name} - $${exp.amount.toFixed(2)}
+      <button class="delete" onclick="deleteExpense(${exp.id})">Delete</button>
+    `;
+                list.appendChild(li);
+            });
+            totalExpenses();
+        }
+
+        // Event listener
+        form.addEventListener('submit', addExpense);
+        render();
+
+    </script>
+</body>
+
+</html>
