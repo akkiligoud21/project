@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>To-Do List</title>
+  <style>
+    body {
+      max-width: 600px;
+      margin: auto;
+      font: 18px "Segoe UI", sans-serif;
+      background: #f5f5f5;
+    }
+
+    input {
+      padding: 14px 32px 14px 17px;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+      margin-right: 10px;
+      font-size: 18px;
+    }
+
+    button {
+      padding: 14px 20px;
+      background: #0f1419;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    button:hover {
+      background: #ea0707;
+    }
+
+    ul {
+      margin-top: 20px;
+      list-style-type: none;
+      padding: 0;
+    }
+
+    ul li {
+      padding: 18px 8px 18px 8px;
+      list-style-type: none;
+      font-size: 18px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 6px;
+      border-radius: 4px;
+      background: rgb(14, 76, 118);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    ul li.checked {
+      background: #88d8a3;
+      text-decoration: line-through;
+    }
+
+    .close {
+      padding-left: 15px;
+      margin-left: 15px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      background-color: red;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>To-Do List</h2>
+  <input type="text" id="task" placeholder="New task..." onkeypress="handleKey(event)">
+  <button onclick="addTask()">Add</button>
+  <ul id="list"></ul>
+  <button onclick="clearAll()">Clear All</button>
+  <script>
+    let tasks = [];
+
+    // Load from localStorage
+    function loadTasks() {
+      let saved = localStorage.getItem("tasks");
+      if (saved !== null) tasks = JSON.parse(saved);
+    }
+
+    // Display list
+    function displayTasks() {
+      let html = "";
+      tasks.forEach((task, i) => {
+        html += `<li class="${task.checked ? 'checked' : ''}">
+      ${task.text}
+      <span class="close" onclick="removeTask(${i})">&times;</span>
+    </li>`;
+      });
+      document.getElementById("list").innerHTML = html;
+    }
+
+    // Add task
+    function addTask() {
+      let input = document.getElementById("task");
+      if (input.value === "") return;
+      tasks.push({ text: input.value, checked: false });  // Array push
+      input.value = "";
+      saveTasks();
+      displayTasks();
+    }
+
+    // Remove by index
+    function removeTask(i) {
+      tasks.splice(i, 1);  // Array splice
+      saveTasks();
+      displayTasks();
+    }
+
+    // Clear all
+    function clearAll() {
+      tasks = [];
+      saveTasks();
+      displayTasks();
+    }
+
+    // Save to localStorage
+    function saveTasks() {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
+    // Enter key support
+    function handleKey(e) {
+      if (e.key === "Enter") addTask();
+    }
+
+    // Init
+    loadTasks();
+    displayTasks();
+  </script>
+</body>
+
+</html>
